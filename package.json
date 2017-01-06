@@ -1,0 +1,28 @@
+{
+  "name": "@utilitywarehouse/uw-lib-logger.js",
+  "description": "Tiny wrapper around bunyan offering some better 'defaults'.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/utilitywarehouse/uw-lib-logger.js.git"
+  },
+  "keywords": [
+    "bunyan",
+    "logger"
+  ],
+  "author": "Utility Warehouse Web Systems <it-websystems@utilitywarehouse.co.uk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/utilitywarehouse/uw-lib-logger.js/issues"
+  },
+  "homepage": "https://github.com/utilitywarehouse/uw-lib-logger.js#readme",
+	"dependencies": {
+    "bunyan": "^1.8.5",
+    "merge": "^1.2.0"
+  },
+	"devDependencies": {}
+}
