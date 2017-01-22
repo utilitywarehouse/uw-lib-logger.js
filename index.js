@@ -1,5 +1,7 @@
 const bunyan = require('bunyan');
 const merge = require('merge');
+const parsetrace = require('parsetrace');
+
 const safeCycles = bunyan.safeCycles;
 
 // modified from https://github.com/trentm/node-bunyan/blob/master/examples/specific-level-streams.js
@@ -25,14 +27,28 @@ class RecordWriter {
   }
 }
 
+function getStack(err) {
+  if (!err.stack) return;
+
+  const frames = parsetrace(err).object().frames;
+
+  return frames.map(f => `${f.function} :: ${f.file}:${f.line}`);
+}
+
 function errSerializer(err) {
-			return {type: err.type, status: err.status, message: err.message, previous: err.previous ? errSerializer(err.previous) : null};
+			return {
+              type: err.type,
+              status: err.status,
+              message: err.message,
+              stack: getStack(err),
+              previous: err.previous ? errSerializer(err.previous) : undefined
+			};
 		}
 
 
 module.exports = function(config) {
   const logger = bunyan.createLogger(merge.recursive({
-    serializers: {err: errSerializer, req: bunyan.stdSerializers.req},
+    serializers: {err: errSerializer, req: bunyan.stdSerializers.req, error: errSerializer},
     streams: [
       {
         type: 'raw',
