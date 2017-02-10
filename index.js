@@ -30,9 +30,12 @@ class RecordWriter {
 function getStack(err) {
 	if (!err.stack) return;
 
-	const frames = parsetrace(err).object().frames;
-
-	return frames.map(f => `${f.function} :: ${f.file}:${f.line}`);
+	try {
+		const frames = parsetrace(err).object().frames;
+		return frames.map(f => `${f.function} :: ${f.file}:${f.line}`);
+	} catch(error) {
+		return err.stack.split('\n');
+	}
 }
 
 function errSerializer(err) {
