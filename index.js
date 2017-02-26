@@ -49,10 +49,21 @@ function errSerializer(err) {
 	};
 }
 
+function reqSerializer(req) {
+	if (!req || !req.connection) {
+		return req;
+	}
+	return {
+		method: req.method,
+		url: req.url,
+		remoteAddress: req.connection.remoteAddress,
+	};
+};
+
 
 module.exports = function (config) {
 	const logger = bunyan.createLogger(merge.recursive({
-		serializers: {err: errSerializer, req: bunyan.stdSerializers.req, error: errSerializer},
+		serializers: {err: errSerializer, req: reqSerializer, error: errSerializer},
 		streams: [
 			{
 				type: 'raw',
