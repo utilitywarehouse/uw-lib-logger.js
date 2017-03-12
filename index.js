@@ -38,14 +38,26 @@ function getStack(err) {
 	}
 }
 
-function errSerializer(err) {
+function errorWithStackSerializer(err) {
 	return {
 		type: err.type,
 		status: err.status,
 		message: err.message,
 		stack: getStack(err),
+		previous: err.previous ? errorWithStackSerializer(err.previous) : undefined,
+		reference: err.reference,
+		upstream: err.upstream
+	};
+}
+
+function errSerializer(err) {
+	return {
+		type: err.type,
+		status: err.status,
+		message: err.message,
 		previous: err.previous ? errSerializer(err.previous) : undefined,
-		reference: err.reference
+		reference: err.reference,
+		upstream: err.upstream
 	};
 }
 
@@ -61,9 +73,11 @@ function reqSerializer(req) {
 };
 
 
-module.exports = function (config) {
+module.exports = function (config = {}) {
+	const { stack } = config;
+	const serializerForErrors = stack ? errorWithStackSerializer : errSerializer;
 	const logger = bunyan.createLogger(merge.recursive({
-		serializers: {err: errSerializer, req: reqSerializer, error: errSerializer},
+		serializers: {err: serializerForErrors, req: reqSerializer, error: serializerForErrors},
 		streams: [
 			{
 				type: 'raw',
