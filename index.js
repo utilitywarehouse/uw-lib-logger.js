@@ -75,7 +75,7 @@ function reqSerializer(req) {
 
 module.exports = function (config = {}) {
 	const { stack } = config;
-	const serializerForErrors = stack ? errorWithStackSerializer : errSerializer;
+	const serializerForErrors = stack === false ? errSerializer : errorWithStackSerializer;
 	const logger = bunyan.createLogger(merge.recursive({
 		serializers: {err: serializerForErrors, req: reqSerializer, error: serializerForErrors},
 		streams: [
