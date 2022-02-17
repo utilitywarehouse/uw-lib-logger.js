@@ -22,7 +22,7 @@
   "homepage": "https://github.com/utilitywarehouse/uw-lib-logger.js#readme",
   "dependencies": {
     "bunyan": "^1.8.5",
-    "merge": "^1.2.0",
+    "merge": "^2.1.1",
     "parsetrace": "^0.2.0"
   },
   "devDependencies": {}
